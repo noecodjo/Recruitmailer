@@ -23,6 +23,8 @@ public class RecruitMailer {
 	public static final Integer PORT = 587; // change with the appropriate port
 	public static final String USER_NAME = "YOUR_EMAIL";
 	public static final String PASSWORD = "YOUR_PASSWORD"; 
+	public static final String RESUME_NAME = "NAME_OF_THE_RESUME";
+	public static final String ATTACHMENT_NAME = "FILE_NAME";
 	
 	public static void main(String[] args){
 		//create an employee
@@ -46,7 +48,7 @@ public class RecruitMailer {
 					    		+ "Thank you, \n\n"
 					    		+ "Regards,\n"
 					    		+ emp.getfullName())
-					    .addAttachment("NAME_OF_RESUME", new FileDataSource("YOUR_RESUME_HERE"))
+					    .addAttachment(RESUME_NAME, new FileDataSource(ATTACHMENT_NAME))
 					    .build();
 				//send unsecured mail 
 				Mailer mailer=	new Mailer(HOST, PORT, USER_NAME, PASSWORD,TransportStrategy.SMTP_TLS);
