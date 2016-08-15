@@ -1,6 +1,6 @@
 package recruitmailer;
 
-public class Job {
+public class JobPost {
  public String email;
  public String role ;
 }

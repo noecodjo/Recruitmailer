@@ -1,8 +1,10 @@
 package recruitmailer;
 
-public class Employee {
+/*These are the Generic detatils of the employee*/
+public class Employee extends Domain{
 	private String firstName;
 	private String lastName;
+	
 	@SuppressWarnings("unused")
 	private String fullName;
 	private double currentSalary;
@@ -10,8 +12,9 @@ public class Employee {
 	private int noticePeriod;
 	
 	
-	public Employee(String firstname,String lastname,double currentsalary,double expectedsalary,int noticeperiod)
+	public Employee(String firstname,String lastname,String email,double currentsalary,double expectedsalary,int noticeperiod)
 	{
+		super(email);
 		this.firstName = firstname;
 		this.lastName =lastname;
 		this.currentSalary = currentsalary;

@@ -19,28 +19,26 @@ import com.google.gson.stream.JsonReader;
 
 public class RecruitMailer {
  
-	public static final String HOST = "YOUR_SMTP_HOST";
-	public static final Integer PORT = 587; // change with the appropriate port
-	public static final String USER_NAME = "YOUR_EMAIL";
-	public static final String PASSWORD = "YOUR_PASSWORD"; 
-	public static final String RESUME_NAME = "NAME_OF_THE_RESUME";
-	public static final String ATTACHMENT_NAME = "FILE_NAME";
-	
+
+	public final static String LIST = "./list.json";
+
 	public static void main(String[] args){
 		//create an employee
 		// First name, Lastname, Current salary, Expected Salary, Notice Period.
-		Employee emp = new Employee("YOUR_FIRSTNAME","YOUR_LASTNAME",7000,12000,1);
-		
+
+		Employee emp = new Employee("YOUR_FIRSTNAME","YOUR_LASTNAME","YOUR_EMAIL",7000, 12000,1);
+		SMTPemail smtp = new SMTPemail("YOUR_EMAIL","YOUR_PASSWORD","YOUR_SMTP_HOST",587,TransportStrategy.SMTP_TLS);
+		Resume resume = new Resume("YOUR_RESUME_NAME", "YOUR_RESUME_FILE_NAME");
 
 		try {
 			//Read Json File
-			JsonReader reader = new JsonReader(new FileReader("./list.json"));
-			Job[] jobs = new Gson().fromJson(reader, Job[].class);
+			JsonReader reader = new JsonReader(new FileReader(LIST));
+			JobPost[] jobs = new Gson().fromJson(reader, JobPost[].class);
 		
 			//compose mail
-			for(Job job:jobs){
+			for(JobPost job:jobs){
 				Email email = new EmailBuilder()
-					    .from(emp.getFirstname(),USER_NAME)
+					    .from(emp.getFirstname(),emp.getEmail())
 					    .to(job.email, job.email)
 					    .subject(job.role)
 					    .text("Dear Sirs,\n\n"
@@ -48,10 +46,12 @@ public class RecruitMailer {
 					    		+ "Thank you, \n\n"
 					    		+ "Regards,\n"
 					    		+ emp.getfullName())
-					    .addAttachment(RESUME_NAME, new FileDataSource(ATTACHMENT_NAME))
+
+					    .addAttachment(resume.getName(), new FileDataSource(resume.getFilelocation()))
+
 					    .build();
 				//send unsecured mail 
-				Mailer mailer=	new Mailer(HOST, PORT, USER_NAME, PASSWORD,TransportStrategy.SMTP_TLS);
+				Mailer mailer=	new Mailer( smtp.getHost(),smtp.getPort(), smtp.getUserName(),smtp.getPassword(),smtp.getTransportStrategy());
 				mailer.sendMail(email);
 			}
 			
